@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>Todo List</title>
+    <style>
+    body{
+        width:100%;             
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: monospace;                
+    }
+    .item{
+        color: white;
+    }
+    .todo-items{
+      display: flex;
+      flex-direction: column-reverse;
+      transition: .5s;
+    }
+    .todo-items,
+    .todo-items li{
+      margin:0;
+      padding:0;
+      list-style: none;
+    }
+    .todo-items li{
+      padding:10px;
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+      display:flex;
+      justify-content: space-between;
+      transition: .5s;
+    }  
+    @keyframes animate{
+      0%{
+        transform: translate(0,0);
+      }
+      50%{
+        transform: translate(0,20%);
+      }
+      100%{
+        transform: translate(0,0%);
+      }
+    }    
+    #textBox{
+        height: 22px;
+    }
+    .btn {
+      padding: 5px;
+      font-family: monospace;
+      border: 2px solid rgba(0,0,0,0.45);
+      border-radius: 5px;
+      background-color: #212121;
+      color: whitesmoke;
+    }
+    .new-item{
+      display:flex;
+      margin: 2rem;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+    }
+    .inner_new_item{
+      position: absolute;
+    }
+    .option{
+        min-width: 116px;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .item{
+        font-size: 1rem;
+        width: 85%;
+        word-break: break-word;
+    }
+    .mostouter{
+      margin-bottom: 5px;
+    }
+    .outer{
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        margin: 20px;
+    }
+    .inner{
+      align-items: center;      
+      height: 100%;
+      cursor: pointer;
+      color: #212121;
+    }    
+    .inner h3{
+      text-align: center;
+    }
+    #contestDiv{
+      display: flex;
+    }      
+    .headerr{
+      display: flex;
+      align-items: center;
+      width: -webkit-fill-available;
+      padding: 7px;
+      justify-content: center;
+    }     
+    .infoLi{
+      flex-direction: column;
+      border-bottom: 2px solid;
+      margin: 20px;
+    }
+    .info{
+      min-width: 95%;
+      max-width: 95%;
+      border: 1px dashed;
+    }    
+    .formatter{            
+      position: relative;
+      top: -9px;
+    }     
+    .tools{
+      display: flex;
+      position: absolute;
+      top: -16px;
+      width: 100%;
+      justify-content: space-evenly;
+    }
+    </style>
+  </head>
+  <body>
+    <div style="display: flex; flex-direction:column; align-items:center;">
+      <h1 onclick="changeColor()">My ToDo</h1>
+      <input type="text" id="excel_link" placeholder="Enter sheet link">
+    </div>
+    <div class="new-item">    
+      <div class="inner_new_item">
+        <button class="btn" id="btn1" >Save</button>
+        <button class="btn" id="imgg" onclick="getContentOfNoti()" >Fetch</button>
+      </div>        
+    </div>
+    <div class="mostouter">
+      <div class="outer">
+        <div class="inner " id="1st">
+          <textarea placeholder="Problem Name / Tag" style="width: 100%" name="tag" id="tag" cols="30" rows="3"></textarea>          
+        </div>
+        <div class="inner" id="2nd">          
+          <textarea placeholder="Link" style="width: 100%" name="link" id="link" cols="30" rows="3"></textarea>
+        </div>
+        <div class="inner" id="3rd">
+          <textarea placeholder="Problem Statement" style="width: 100%" name="description" id="description" cols="30" rows="6"></textarea>
+        </div>
+        <div class="inner" id="4th">
+          <!-- <div class="formatter">
+            <div class="toolsBox">
+              <div class="tools">
+                <div class="butn" onclick="format('<strong> </strong>',3)"><strong>B</strong></div>
+                <div class="butn" onclick="format('<mark> </mark>',3)"><mark>M</mark></div>
+                <div class="butn" onclick="format('<del> </del>',3)"><del>D</del></div>
+                <div class="butn" onclick="format('<small> </small>',3)"><small>S</small></div>
+                <div class="butn" onclick="format('style',3)"><span style="background-color:rgb(237, 165, 22); color:white">R</span></div>
+              </div>
+            </div>
+          </div> -->
+          <textarea placeholder="Approach " style="width: 100%" name="approach" id="approach" cols="30" rows="6"></textarea>          
+        </div>
+        <div class="inner" id="5th">
+          <textarea placeholder="Extra Point" style="width: 100%" name="extra" id="extra" cols="30" rows="6"></textarea>                    
+        </div>
+      </div>
+    </div>
+    <ul class="todo-items">
+    </ul>
+    <ul class="todo-items" id="details">
+    </ul>
+
+<script>
+  let url = "";
+  const val = localStorage.getItem("excel_link");
+  const excel_link = document.getElementById('excel_link');
+
+  if(val!=undefined && val!=null)excel_link.value = val;
+
+  const _tag = document.getElementById('tag');
+  const _link = document.getElementById('link');
+  const _description = document.getElementById('description');
+  const _appraoch = document.getElementById('approach');
+  const _extra = document.getElementById('extra');
+  const btn = document.getElementById('btn1');
+  const imgg = document.getElementById('imgg');
+
+  _appraoch.innerHTML = 
+  `<pre> 
+
+    
+   
+    
+</pre>`
+  btn.addEventListener('click',async()=>{
+      const tag = _tag.value;
+      const link = _link.value;
+      const description = _description.value;
+      const approach = _appraoch.value;
+      const extra = _extra.value;
+      const conn = excel_link.value;
+      if(conn.length<1){
+        alert("Please enter link");
+        return;
+      }
+      localStorage.setItem("excel_link",conn);
+      url = conn;
+      const abc = await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          cache: 'no-cache',
+          headers: { 'Content-Type': 'application/json' },
+          redirect: 'follow',
+          body: JSON.stringify({ tag , link , description , approach , extra })
+      });
+      _tag.value = "";
+      _link.value = "";
+      _description.value = "";
+      _appraoch.value = 
+  `<pre> 
+   
+    
+
+
+</pre>`
+      localStorage.setItem("lastInput",JSON.stringify({tag,link,description,approach,extra}));
+  })
+
+  // showing notificaition data in notificaion div
+  let details = [];
+  const showNoti = () => {            
+      const box = document.getElementById('details');  
+      var output = '';
+      for (let i = 0; i < details.length; i++) {
+              let temp2 =   details[i][2].replace(/\n/g, "<br/>");                            
+              let temp3 =   details[i][3].replace(/\n/g, "<br />");              
+              let temp4 =   details[i][4].replace(/\n/g, "<br />");                            
+              output += `
+              <li class="infoLi">
+                  <div class="info"><a style="color:orange;" href="${details[i][1]}">${details[i][0]}</a> </div>                
+                  <div class="info">${temp3}</div>
+                  <div class="info">${temp2}</div>
+                  <div class="info">${temp4}</div>
+              </li>
+              `                                      
+      }
+      box.innerHTML += output;
+      window.scroll({
+        top: 500,
+        left: 0,
+        behavior: 'smooth'
+      });
+      if(details.length<2){ 
+        alert("Please click again;")       
+        details = JSON.parse(localStorage.getItem("datas"));
+      }
+  }
+
+  // fetching notification content
+
+  const getContentOfNoti = async () => {            
+      const conn = excel_link.value;
+      url = conn;
+      if(conn.length<1){
+        alert("Please enter link");
+        return;
+      }  
+      localStorage.setItem("excel_link",conn);
+      await fetch(url)
+      .then(d => d.json())
+      .then(d => {
+          const data = d.data;  
+          details = data; 
+          console.log(data);
+          showNoti();                  
+          if(details.length>2){
+            localStorage.setItem("datas",JSON.stringify(details));                
+          }
+      })
+      .catch(err => {
+        console.log(err);                 
+      })      
+  }
+  
+  function format(content , idx){
+    let textarea = document.getElementsByClassName(`div${idx}`)[0];
+    let val = textarea.value;
+    let data = "<span style='background-color:rgb(237, 165, 22); color:white'> </span>"
+    if(content == "style"){val+=data; content = data;}
+    else val += content;
+    // navigator.clipboard.writeText(content);
+    textarea.value = val;    
+  }
+  function changeColor(){
+    const bdy = document.querySelector('body');
+    if(bdy.style.backgroundColor == "black"){
+      bdy.style.backgroundColor = "white";
+      bdy.style.color = "inherit";
+    }
+    else{
+      bdy.style.backgroundColor = "black";
+      bdy.style.color = "white";
+    }
+  }
+    </script>
+  </body>
+</html>

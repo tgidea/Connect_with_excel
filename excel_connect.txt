@@ -1,0 +1,41 @@
+function doGet(request) {
+  var query = request.parameter.q;
+
+  // Set Number of column you want to send
+  var parameter = 5;
+  
+  var sheetname = "Sheet1";
+  var doc = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty("key"));
+  var sheet = doc.getSheetByName(sheetname);
+  var lastrow = sheet.getLastRow();
+
+  var rows = [];
+  var range = sheet.getRange(2, 1, lastrow - 1, parameter);
+  var values = range.getValues();  
+  for (var row = 0; row < values.length; row++) {
+      rows.push([]);    
+      rows[row].push(values[row][0]);
+      rows[row].push(values[row][1]);
+      rows[row].push(values[row][2]);
+      rows[row].push(values[row][3]);
+      rows[row].push(values[row][4]);
+  }
+  if (query != null) {
+    var rowstoreturn = row.filter(a => a[0] == query);
+    return ContentService.createTextOutput(JSON.stringify({ "data": rowstoreturn, "error": false })).setMimeType    (ContentService.MimeType.JSON);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({ "data": rows, "error": false })).setMimeType(ContentService.MimeType.JSON);
+}
+function setup() {
+  var doc = SpreadsheetApp.getActiveSpreadsheet();
+  PropertiesService.getScriptProperties().setProperty("key", doc.getId());
+}
+
+function doPost(e) {
+  const body = e.postData.contents;
+  const bodyJson = JSON.parse(body);
+  const ss = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Sheet1');
+  ss.appendRow([bodyJson.tag, bodyJson.link, bodyJson.approach , bodyJson.description,bodyJson.extra]);  
+}
+
