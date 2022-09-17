@@ -1,25 +1,27 @@
 # StoreInExcel
-Feel bored in writing important points directly in google sheet.
-Here is the solution : 
+Feel bored in writing important points directly in google sheet.<br>
+Here is the solution : <br>
 
-This is UI to interact with your Excel Sheet.
+This is UI to interact with your Excel Sheet.<br><br>
+<ul>
+    <li>Open your google sheet.</li>
+    <li>Go to Extension</li>
+    <li>Click on App script</li>
+    <li>Paste the code given in excel_connect.txt file</li>
+    <li>Run the setup function in top menu</li>
+    <li>Give all permission in required</li>
+    <li>Deploy your sheet on web</li>
+    <li>Your will get a link . Save it.</li>
+    <li>Open the index.html file or check for published page.</li>
+    <li>Enter the link and Save whateven you want</li>
+    <li>Enter you problem , its approach you want to remember and some points.</li>
+    <li>Save it . Fetch it .</li>
+    <li>Thats all! 😄</li>
+</ul>
 
-=> Open your google sheet.
-=> Go to Extension.
-=> Click on App script.
-=> Paste the code given in excel_connect.txt file.
-=> Run the setup function in top menu.
-=> Give all permission in required.
-=> Deploy your sheet on web.
-=> Your will get a link . Save it.
-=> Open the index.html file or check for published page.
-=> Enter the link and Save whateven you want
-=> Enter you problem , its approach you want to remember and some points.
-=> Save it . Fetch it .
-=> Thats all! 😄
 
-Note : You can also write text in HTML Tag also to give character like 
-    -> Bold(<b></b>)
-    -> Mark (<mark></mark>)
-    -> Small (<small></small>) etc.
+Note : You can also write text in HTML Tag like <br>
+    -> <b>Bold</b> use `<b></b>`<br>
+    -> <mark>Mark</mark> `<mark></mark>`<br>
+    -> Small (<small></small>) `<small></small>` etc.<br>
 
