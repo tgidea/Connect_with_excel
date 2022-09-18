@@ -10,7 +10,7 @@ function doGet(request) {
   var lastrow = sheet.getLastRow();
 
   var rows = [];
-  var range = sheet.getRange(2, 1, lastrow - 1, parameter);
+  var range = sheet.getRange(1, 1, lastrow - 1, parameter);
   var values = range.getValues();  
   for (var row = 0; row < values.length; row++) {
       rows.push([]);    
