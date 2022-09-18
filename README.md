@@ -9,8 +9,8 @@ This is UI to interact with your Excel Sheet.<br><br>
     <li>Click on App script</li>
     <li>Paste the code given in excel_connect.txt file</li>
     <li>Run the setup function in top menu</li>
-    <li>Give all permission in required</li>
-    <li>Deploy your sheet on web</li>
+    <li>Give all permission in required by clicking on 'advanced'. Don't worry it's completely Safe. Only you have access to your sheet unless you share your sheet link to anyone else.</li>
+    <li>Deploy your sheet on web (Remember to change access to anyone)</li>
     <li>Your will get a link . Save it.</li>
     <li>Open the index.html file or check for published page.</li>
     <li>Enter the link and Save whateven you want</li>
