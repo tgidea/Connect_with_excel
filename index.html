@@ -199,11 +199,12 @@
       const description = _description.value;
       const approach = _appraoch.value;
       const extra = _extra.value;
-      const conn = excel_link.value;
+      const conn = excel_link.value;      
       if(conn.length<1){
         alert("Please enter link");
         return;
       }
+      if(tag.trim()=="" || description=="")return;      
       localStorage.setItem("excel_link",conn);
       url = conn;
       const abc = await fetch(url, {
