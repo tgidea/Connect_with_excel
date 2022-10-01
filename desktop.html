@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>Todo List</title>
+    <style>
+    body{
+        width:100%;             
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: monospace;                
+    }
+    .item{
+        color: white;
+    }
+    .todo-items{
+      display: flex;
+      flex-direction: column-reverse;
+      transition: .5s;
+    }
+    .todo-items,
+    .todo-items li{
+      margin:0;
+      padding:0;
+      list-style: none;
+    }
+    .todo-items li{
+      padding:10px;
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+      display:flex;
+      justify-content: space-between;
+      transition: .5s;
+    }  
+    @keyframes animate{
+      0%{
+        transform: translate(0,0);
+      }
+      50%{
+        transform: translate(0,20%);
+      }
+      100%{
+        transform: translate(0,0%);
+      }
+    }    
+    #textBox{
+        height: 22px;
+    }
+    .btn {
+      padding: 5px;
+      font-family: monospace;
+      border: 2px solid rgba(0,0,0,0.45);
+      border-radius: 5px;
+      background-color: #212121;
+      color: whitesmoke;
+      cursor: pointer;
+    }
+    .butn {
+      padding: 3px;
+      font-family: monospace;
+      width: 10px;
+      border: 2px solid white;
+      border-radius: 5px;  
+      background-color: #212121;    
+      color: whitesmoke;
+    }
+    .new-item{
+      display:flex;
+      margin: 2rem;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+    }
+    .inner_new_item{
+      position: absolute;
+    }
+    .option{
+        min-width: 116px;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .item{
+        font-size: 1rem;
+        width: 85%;
+        word-break: break-word;
+    }
+    .mostouter{
+      margin-bottom: 5px;
+      margin-top: 5%;
+    }
+    .outer{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      position: relative;                
+    }
+    .inner{
+      align-items: center;      
+      height: 100%;
+      cursor: pointer;
+      color: #212121;
+      /* border-right: 2px solid rgb(12, 82, 77) ; */
+    
+    }
+    /* .inner:nth-child(1) { */
+      /* border-left: 2px solid rgb(12, 82, 77) ; */
+    /* } */
+    .inner h3{
+      text-align: center;
+    }
+    #contestDiv{
+      display: flex;
+    }  
+    .info{
+      min-width: 20%;
+      /* width: fit-content; */
+      max-width: 50%;
+    }
+    .headerr{
+      display: flex;
+      align-items: center;
+      width: -webkit-fill-available;
+      padding: 7px;
+      justify-content: center;
+    }
+    @media screen and (max-width: 600px) {
+      .infoLi{
+        flex-direction: column;
+        border-bottom: 2px solid;
+      }
+      .info{
+        min-width: 95%;
+        max-width: 95%;
+        border: 1px dashed;
+      }
+      .outer{
+        flex-direction: column;
+      }
+    }
+    .formatter{            
+      position: relative;
+      top: -9px;
+    }     
+    .tools{
+      display: flex;
+      position: absolute;
+      top: -16px;
+      width: 100%;
+      justify-content: space-evenly;
+    }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1 onclick="changeColor()" style="text-align: center; cursor: pointer;">My ToDo</h1>
+    </div>
+    <div class="new-item">    
+      <div class="inner_new_item">
+        <button class="btn" id="btn1" >Save</button>
+        <button class="btn" id="imgg" onclick="getContentOfNoti()" >Fetch</button>
+        <button class="btn" onclick="preview()" >Preview</button>
+      </div>        
+    </div>
+    <div class="mostouter">     
+      <div id="passControl" class="outer">        
+        <div class="inner ">
+          <textarea placeholder="Tag" class="div0" name="tag" id="tag" cols="5" rows="6"></textarea>          
+        </div>
+        <div class="inner">          
+          <textarea placeholder="Link" class="div1" name="link" id="link" cols="5" rows="6"></textarea>
+        </div>
+        <div class="inner" style="position:relative" >          
+          <textarea placeholder="Problem Statement" class="div2" name="description" id="description" cols="35" rows="6"></textarea>
+        </div>
+        <div class="inner">
+          <div class="formatter">
+            <div class="toolsBox">
+              <div class="tools">
+                <div class="butn" onclick="format('<strong> </strong>',3)"><strong>B</strong></div>
+                <div class="butn" onclick="format('<mark> </mark>',3)"><mark>M</mark></div>
+                <div class="butn" onclick="format('<del> </del>',3)"><del>D</del></div>
+                <div class="butn" onclick="format('<small> </small>',3)"><small>S</small></div>
+                <div class="butn" onclick="format('<details><summary>CONTENT</summary><p></p></details>',3)">D</div>                               
+              </div>
+            </div>
+          </div>
+          <textarea placeholder="Approach" class="div3" name="approach" id="approach" cols="60" rows="6"></textarea>          
+        </div>
+        <div class="inner" >
+          <textarea placeholder="key points" class="div4" name="extra" id="extra" cols="40" rows="6"></textarea>                    
+        </div>
+      </div>
+    </div>
+    <ul class="todo-items">
+    <li class="infoLi">
+      <!-- <div class="info">Tag </div>       -->
+      <div class="info">Quesion/Description</div>
+      <div class="info">Approach </div>
+      <div class="info">Extra</div>
+    </li>
+  </ul>
+    <ul class="todo-items" id="details">
+    </ul>
+    <script>
+        
+  // Paste link here.
+  const url = "";
+
+  const _tag = document.getElementById('tag');
+  const _link = document.getElementById('link');
+  const _description = document.getElementById('description');
+  const _appraoch = document.getElementById('approach');
+  const _extra = document.getElementById('extra');
+  const btn = document.getElementById('btn1');
+  const imgg = document.getElementById('imgg');
+
+  function convert(str){
+    str =   str.replace(/\n/g, "<br/>");  
+    str =   str.replace(/</g, "&#60;");  
+
+    //restoring html tags 
+    str =   str.replace(/&#60;strong/g, "<strong");  
+    str =   str.replace(/&#60;\/strong/g, "</strong");  
+
+    str =   str.replace(/&#60;mark/g, "<mark style='background-color:#9ceae9;'");  
+    str =   str.replace(/&#60;\/mark/g, "</mark");  
+    
+    str =   str.replace(/&#60;details/g, "<details");  
+    str =   str.replace(/&#60;\/details/g, "</details");
+    
+    str =   str.replace(/&#60;small/g, "<small");  
+    str =   str.replace(/&#60;\/small/g, "</small");
+
+    str =   str.replace(/&#60;summary/g, "<summary");  
+    str =   str.replace(/&#60;\/summary/g, "</summary");
+    
+    str =   str.replace(/&#60;br\/>/g, "<br/>"); 
+    
+    str =   str.replace(/&#60;p/g, "<p");  
+    str =   str.replace(/&#60;\/p/g, "</p");
+    str =   str.replace(/<p;/g, "&#60;p;");
+    str =   str.replace(/<p<br/g, "&#60;p<br");
+    str =   str.replace(/<p /g, "&#60; p");
+ 
+    str =   str.replace(/&#60;b/g, "<b");  
+    str =   str.replace(/&#60;\/b/g, "</b");
+    str =   str.replace(/<b;/g, "&#60;b;");
+    str =   str.replace(/<b<br/g, "&#60;b<br");
+    str =   str.replace(/<b /g, "&#60; b");
+    
+    str =   str.replace(/&#60;a h/g, "<a h");  
+    str =   str.replace(/&#60;\/a/g, "</a");
+    str =   str.replace(/<a;/g, "&#60;a;");
+    str =   str.replace(/<a<br/g, "&#60;a<br");
+    
+    str =   str.replace(/&#60;span/g, "<span");  
+    str =   str.replace(/&#60;\/span/g, "</span");
+    
+    str =   str.replace(/&#60;svg/g, "<svg");  
+    str =   str.replace(/&#60;\/svg/g, "</svg");
+
+    str =   str.replace(/&#60;polyline/g, "<polyline");  
+    str =   str.replace(/&#60;\/polyline/g, "</polyline");
+    
+    str =   str.replace(/&#60;hr/g, "<hr");  
+    str =   str.replace(/&#60;\/hr/g, "</hr");
+
+    str =   str.replace(/&#60;del/g, "<del");  
+    str =   str.replace(/&#60;\/del/g, "</del");
+
+    str =   str.replace(/&#60;pre/g, "<pre");  
+    str =   str.replace(/&#60;\/pre/g, "</pre");
+    
+    str =   str.replace(/&#60;img/g, "<img");  
+    str =   str.replace(/&#60;img/g, "<img"); 
+    //restoring of html tag end.
+
+    // Code editor 
+    str =   str.replace(/>int /g, ">{{{int}}} ");  
+    str =   str.replace(/int>/g, "{{{int}}}>");  
+    str =   str.replace(/,int/g, ",{{{int}}}");  
+    str =   str.replace(/ int /g, " {{{int}}} ");  
+    str =   str.replace(/\(int /g, "({{{int}}} ");  
+    str =   str.replace(/return;/g, " {r{{return}}};");  
+    str =   str.replace(/return /g, " {r{{return}}} ");  
+    str =   str.replace(/for\(/g, " {r{{for}}}(");  
+    str =   str.replace(/for \(/g, " {r{{for}}} (");  
+    str =   str.replace(/while/g, " {r{{while}}}");  
+    str =   str.replace(/if\(/g, " {r{{if}}}(");  
+    str =   str.replace(/if \(/g, "{r{{if}}} (");  
+    str =   str.replace(/else/g, "{r{{else}}}");  
+    str =   str.replace(/ \= /g, " {@=@} ");  
+    str =   str.replace(/\+/g, "{@+@}");  
+    str =   str.replace(/ \- /g, "{@-@}");  
+    str =   str.replace(/\*/g, "{@*@}");    
+    // str =   str.replace(/\`s\`\`/g, "<div style='background:gray;'>");    
+    // str =   str.replace(/\`e\`\`/g, "</div>");    
+
+    str =   str.replace(/\(/g, "<span style ='color:#0acfb9 ;'><strong>(</strong></span>");      
+    str =   str.replace(/\)/g, "<span style ='color:#0acfb9 ;'><strong>)</strong></span>");  
+    
+    //code editor end
+
+    //Changing brackets into colour
+    str =   str.replace(/{r{{/g, "<span style ='color:red;'><strong>");
+    str =   str.replace(/}}}/g, "</strong></span>");
+
+    str =   str.replace(/{{{/g, "<span style ='color:orange;'><strong>");
+    str =   str.replace(/}}}/g, "</strong></span>");
+
+    str =   str.replace(/{b{{/g, "<span style ='color:blue;'><strong>");
+    str =   str.replace(/}}}/g, "</strong></span>");
+
+    str =   str.replace(/{p{{/g, "<span style ='color:#08BDCB ;'><strong>");
+    str =   str.replace(/}}}/g, "</strong></span>");
+   
+    str =   str.replace(/{y{{/g, "<span style ='color:#0acfb9 ;'><strong>");
+    str =   str.replace(/}}}/g, "</strong></span>");
+    
+    str =   str.replace(/{g{{/g, "<span style ='color:#05BB45;'><strong>");
+    str =   str.replace(/}}}/g, "</strong></span>");
+
+    str =   str.replace(/{@/g, "<span style ='color:#F5CE08 ;'><strong>");
+    str =   str.replace(/@}/g, "</strong></span>");
+    
+    //change of bracket into colour end.
+
+    //code editor last step for '{''}'
+    str =   str.replace(/\{/g, "<span style ='color:#05BB45;'><strong>{</strong></span>");      
+    str =   str.replace(/\}/g, "<span style ='color:#05BB45;'><strong>}</strong></span>");      
+    return str;
+  }
+  console.log("{@ @}  {g{{ }}}  {r{{ }}}  {b{{ }}}  {p{{ }}}");
+
+  btn.addEventListener('click',async()=>{
+      let tag = _tag.value;
+      let link = _link.value;
+      let description = _description.value;
+      let approach = _appraoch.value;
+      let extra = _extra.value;
+      if(approach==""  || description=="")return;
+      let original = approach;
+      description = convert(description);
+      approach = convert(approach);
+      extra = convert(extra);
+      const abc = await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          cache: 'no-cache',
+          headers: { 'Content-Type': 'application/json' },
+          redirect: 'follow',
+          body: JSON.stringify({ tag , link , description , approach , extra , original })
+      });
+      _tag.value = "";
+      _link.value = "";
+      _description.value = "";
+      localStorage.setItem("lastInput",JSON.stringify({tag,link,description,approach,extra}));
+  })
+
+  // showing notificaition data in notificaion div
+  let details = [];
+  function preview(){
+    let tag = _tag.value;
+    let link = _link.value;
+    let description = _description.value;
+    let approach = _appraoch.value;
+    let extra = _extra.value;
+    const box = document.getElementById('details');  
+    var output = '';
+    description =   convert(description);                           
+    approach =   convert(approach) ;   
+    extra =   convert(extra);
+    output += `
+    <li class="infoLi">
+        <div class="info"><a style="color:orange;" href="${link}">${tag}</a><br>${description} </div>                  
+        <div class="info">${approach}</div>
+        <div class="info">${extra}</div>
+    </li>
+    `                                      
+    
+    box.innerHTML += output;
+  }
+  const showNoti = () => {      
+      console.log(details);
+      const box = document.getElementById('details');  
+
+      var output = '';
+      for (let i = 0; i < details.length; i++) {
+              let temp2 =   details[i][2].replace(/\n/g, "<br/>");                            
+              let temp3 =   details[i][3].replace(/\n/g, "<br />");              
+              let temp4 =   details[i][4].replace(/\n/g, "<br />");                            
+              output += `
+              <li class="infoLi">
+                  <div class="info"><a style="color:orange;" href="${details[i][1]}">${details[i][0]}</a><br>${temp3} </div>                  
+                  <div class="info">${temp2}</div>
+                  <div class="info">${temp4}</div>
+              </li>
+              `                                      
+      }
+      box.innerHTML += output;
+      if(details.length<2){
+        alert('Data erased');
+        details = JSON.parse(localStorage.getItem("datas"));
+      }
+  }
+
+  // fetching notification content
+
+  const getContentOfNoti = async () => {    
+      document.querySelector('body').style.cursor = "progress";      
+      await fetch(url)
+      .then(d => d.json())
+      .then(d => {
+          const data = d.data;  
+          details = data; 
+          console.log(data);
+          showNoti();
+          document.querySelector('body').style.cursor = "default";          
+          if(details.length>2){
+            localStorage.setItem("datas",JSON.stringify(details));                
+          }
+      })
+      .catch(err => {
+        console.log(err);
+        showNoti(); 
+        alert(err);
+        document.querySelector('body').style.cursor = "default";         
+      })      
+  }
+  
+  function format(content , idx){
+    let textarea = document.getElementsByClassName(`div${idx}`)[0];
+    let val = textarea.value;
+    let data = "<span style='background-color:rgb(237, 165, 22); color:white'> </span>"
+    if(content == "style"){val+=data; content = data;}
+    else if(content=='svg'){val += "<svg height='20' width='80'><polyline points='0,15 80,15' style='fill:white;stroke:red;stroke-width:4' /></svg>"}
+    else val += content;
+    // navigator.clipboard.writeText(content);
+    textarea.value = val;    
+  }
+  function changeColor(){
+    const bdy = document.querySelector('body');
+    if(bdy.style.backgroundColor == "black"){
+      bdy.style.backgroundColor = "white";
+      bdy.style.color = "inherit";
+    }
+    else{
+      bdy.style.backgroundColor = "black";
+      bdy.style.color = "white";
+    }
+  }
+    </script>
+  </body>
+</html>
